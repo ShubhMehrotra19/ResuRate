@@ -6,7 +6,7 @@ import ATS from "~/components/ATS";
 import Details from "~/components/Details";
 
 export const meta = () => ([
-    { title: 'Resumind | Review ' },
+    { title: 'ResuRate | Review ' },
     { name: 'description', content: 'Detailed overview of your resume' },
 ])
 
@@ -50,38 +50,54 @@ const Resume = () => {
     }, [id]);
 
     return (
-        <main className="!pt-0">
-            <nav className="resume-nav">
-                <Link to="/" className="back-button">
-                    <img src="/icons/back.svg" alt="logo" className="w-2.5 h-2.5" />
-                    <span className="text-gray-800 text-sm font-semibold">Back to Homepage</span>
+        <main className="bg-black min-h-screen w-full !pt-0">
+            <nav className="w-full px-6 py-4 flex items-center">
+                <Link
+                    to="/"
+                    className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-gray-100 rounded-full px-4 py-2 shadow-lg transition-all backdrop-blur z-30"
+                >
+                    <svg className="h-5 w-5 mr-1" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"
+                         strokeLinejoin="round" viewBox="0 0 24 24">
+                        <path d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    <span className="text-gray-200 text-sm font-semibold">Back to Homepage</span>
                 </Link>
             </nav>
             <div className="flex flex-row w-full max-lg:flex-col-reverse">
-                <section className="feedback-section bg-[url('/images/bg-small.svg') bg-cover h-[100vh] sticky top-0 items-center justify-center">
+                <section className="feedback-section bg-black bg-cover h-[100vh] sticky top-0 flex items-center justify-center">
                     {imageUrl && resumeUrl && (
-                        <div className="animate-in fade-in duration-1000 gradient-border max-sm:m-0 h-[90%] max-wxl:h-fit w-fit">
+                        <div className="animate-in fade-in duration-1000 gradient-border max-sm:m-0 h-[90%] max-wxl:h-fit w-fit p-4">
                             <a href={resumeUrl} target="_blank" rel="noopener noreferrer">
                                 <img
                                     src={imageUrl}
-                                    className="w-full h-full object-contain rounded-2xl"
+                                    className="w-full h-full object-contain rounded-2xl shadow-2xl border border-white/10"
                                     title="resume"
                                 />
                             </a>
                         </div>
                     )}
                 </section>
-                <section className="feedback-section">
-                    <h2 className="text-4xl !text-black font-bold">Resume Review</h2>
-                    {feedback ? (
-                        <div className="flex flex-col gap-8 animate-in fade-in duration-1000">
-                            <Summary feedback={feedback} />
-                            <ATS score={feedback.ATS.score || 0} suggestions={feedback.ATS.tips || []} />
-                            <Details feedback={feedback} />
-                        </div>
-                    ) : (
-                        <img src="/images/resume-scan-2.gif" className="w-full" />
-                    )}
+                <section className="feedback-section px-4 py-8 flex-1 w-full max-w-3xl mx-auto">
+                    <h2 className="text-4xl font-bold text-gray-100 mb-8">Resume Review</h2>
+                    <div className="flex flex-col gap-8">
+                        {feedback ? (
+                            <>
+                                <div className="bg-gray-900/80 border border-white/10 rounded-3xl shadow-2xl p-6">
+                                    <Summary feedback={feedback} />
+                                </div>
+                                <div className="bg-gray-900/80 border border-white/10 rounded-3xl shadow-2xl p-6">
+                                    <ATS score={feedback.ATS.score || 0} suggestions={feedback.ATS.tips || []} />
+                                </div>
+                                <div className="bg-gray-900/80 border border-white/10 rounded-3xl shadow-2xl p-6">
+                                    <Details feedback={feedback} />
+                                </div>
+                            </>
+                        ) : (
+                            <div className="flex justify-center">
+                                <img src="/images/resume-scan-2.gif" className="w-40" alt="Analyzing..." />
+                            </div>
+                        )}
+                    </div>
                 </section>
             </div>
         </main>

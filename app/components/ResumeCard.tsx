@@ -1,27 +1,114 @@
-import {Link} from "react-router";
+import { Link } from "react-router";
 import ScoreCircle from "~/components/ScoreCircle";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
-export const ResumeCard = ({resume} : {resume : Resume}) => {
+export const ResumeCard = ({ resume }: { resume: Resume }) => {
+    const cardRef = useRef(null);
+    const imageRef = useRef(null);
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            gsap.set(cardRef.current, { y: 30, opacity: 0 });
+            gsap.set(imageRef.current, { scale: 1.1 });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        gsap.to(cardRef.current, {
+                            y: 0,
+                            opacity: 1,
+                            duration: 0.6,
+                            ease: "power3.out"
+                        });
+                        gsap.to(imageRef.current, {
+                            scale: 1,
+                            duration: 0.8,
+                            ease: "power3.out"
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+
+            if (cardRef.current) observer.observe(cardRef.current);
+
+            return () => observer.disconnect();
+        }, cardRef);
+
+        return () => ctx.revert();
+    }, []);
+
+    const handleMouseEnter = () => {
+        gsap.to(cardRef.current, {
+            y: -10,
+            scale: 1.02,
+            duration: 0.3,
+            ease: "power2.out"
+        });
+        gsap.to(imageRef.current, {
+            scale: 1.05,
+            duration: 0.3,
+            ease: "power2.out"
+        });
+    };
+
+    const handleMouseLeave = () => {
+        gsap.to(cardRef.current, {
+            y: 0,
+            scale: 1,
+            duration: 0.3,
+            ease: "power2.out"
+        });
+        gsap.to(imageRef.current, {
+            scale: 1,
+            duration: 0.3,
+            ease: "power2.out"
+        });
+    };
+
     return (
-        <Link to={`/resume/${resume.id}`} className='resume-card animate-in fade-in'>
-            <div className='resume-card-header'>
-            <div className="flex flex-col gap-2">
-                <h2 className={'text-black font-bold break-words'}>
-                    {resume.companyName}
-                </h2>
-                <h3 className='text-lg break-words text-gray-500'>
-                    {resume.jobTitle}
-                </h3>
-            </div>
-            <div className={'flex-shrink-0'}>
-                <ScoreCircle score={resume.feedback.overallScore} />
-            </div>
-            </div>
-            <div className='gradient-border animate-in fade-in duration-1000'>
-                <div className='w-full h-full'>
-                    <img src={resume.imagePath} alt='resume' className='w-full h-[350px] max-sm:h-[200px] object-cover object-top' />
+            <div
+                ref={cardRef}
+                className='backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-6 transition-all duration-300 hover:bg-white/10 hover:border-white/20 overflow-hidden relative'
+            >
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
+
+                <div className='flex items-start justify-between mb-6 relative z-10'>
+                    <div className="flex flex-col gap-2 flex-1 min-w-0">
+                        <h2 className='text-white font-bold text-xl break-words leading-tight'>
+                            {resume.companyName}
+                        </h2>
+                        <h3 className='text-lg break-words text-gray-400 leading-relaxed'>
+                            {resume.jobTitle}
+                        </h3>
+                    </div>
+                    <div className='flex-shrink-0 ml-4'>
+                        <ScoreCircle score={resume.feedback.overallScore} />
+                    </div>
+                </div>
+
+                <div className='relative overflow-hidden rounded-2xl border border-white/10'>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10 pointer-events-none"></div>
+                    <img
+                        ref={imageRef}
+                        src={resume.imagePath}
+                        alt='resume'
+                        className='w-full h-[350px] max-sm:h-[200px] object-cover object-top transition-transform duration-300'
+                    />
+                </div>
+
+                <div className="mt-4 flex items-center justify-between text-sm text-gray-400 relative z-10">
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span>Active Application</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                    </div>
                 </div>
             </div>
-        </Link>
     );
 };
