@@ -1,16 +1,8 @@
 import type { Route } from "./+types/home";
-import {Navbar} from "~/components/Navbar";
-import {resumes} from "../../constants";
-import {ResumeCard} from "~/components/ResumeCard";
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import { Navbar } from "~/components/Navbar";
+import { resumes } from "../../constants";
+import { ResumeCard } from "~/components/ResumeCard";
 import * as React from "react";
-import Footer from "~/components/Footer";
-
-// Import ScrollTrigger correctly
-import ScrollTrigger from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -19,196 +11,65 @@ export function meta({}: Route.MetaArgs) {
     ];
 }
 
-const StatsCard = ({ number, label, delay = 0 } : {number : string, label : string, delay : number}) => {
-    const cardRef = useRef(null);
+const StatsCard = ({ number, label }: { number: string, label: string }) => (
+    <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300">
+        <div className="text-3xl font-bold text-white mb-2">{number}</div>
+        <div className="text-gray-400 text-sm font-medium">{label}</div>
+    </div>
+);
 
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.fromTo(cardRef.current,
-                { y: 50, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.8,
-                    delay,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: cardRef.current,
-                        start: "top 90%",
-                        toggleActions: "play none none reverse"
-                    }
-                }
-            );
-        }, cardRef);
-
-        return () => ctx.revert();
-    }, [delay]);
-
-    return (
-        <div ref={cardRef} className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300">
-            <div className="text-3xl font-bold text-white mb-2">{number}</div>
-            <div className="text-gray-400 text-sm font-medium">{label}</div>
-        </div>
-    );
-};
-
-const FeatureCard = ({ icon, title, description, delay = 0 }: {
+const FeatureCard = ({
+                         icon,
+                         title,
+                         description,
+                     }: {
     icon: React.ReactNode;
     title: string;
     description: string;
-    delay?: number;
-}) => {
-    const cardRef = useRef(null);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.fromTo(cardRef.current,
-                { scale: 0.8, opacity: 0 },
-                {
-                    scale: 1,
-                    opacity: 1,
-                    duration: 0.6,
-                    delay,
-                    ease: "back.out(1.7)",
-                    scrollTrigger: {
-                        trigger: cardRef.current,
-                        start: "top 85%",
-                        toggleActions: "play none none reverse"
-                    }
-                }
-            );
-        }, cardRef);
-
-        return () => ctx.revert();
-    }, [delay]);
-
-    return (
-        <div ref={cardRef} className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group">
-            <div className="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                {icon}
-            </div>
-            <h3 className="text-white text-lg font-semibold mb-2">{title}</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
+}) => (
+    <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group">
+        <div className="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+            {icon}
         </div>
-    );
-};
+        <h3 className="text-white text-lg font-semibold mb-2">{title}</h3>
+        <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
+    </div>
+);
 
-const FloatingOrbs = () => {
-    const orb1Ref = useRef(null);
-    const orb2Ref = useRef(null);
-    const orb3Ref = useRef(null);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.to(orb1Ref.current, {
-                y: -30,
-                duration: 4,
-                ease: "sine.inOut",
-                repeat: -1,
-                yoyo: true
-            });
-
-            gsap.to(orb2Ref.current, {
-                y: 20,
-                x: 15,
-                duration: 5,
-                ease: "sine.inOut",
-                repeat: -1,
-                yoyo: true,
-                delay: 1
-            });
-
-            gsap.to(orb3Ref.current, {
-                y: -15,
-                x: -10,
-                duration: 6,
-                ease: "sine.inOut",
-                repeat: -1,
-                yoyo: true,
-                delay: 2
-            });
-        });
-
-        return () => ctx.revert();
-    }, []);
-
-    return (
-        <>
-            <div ref={orb1Ref} className="absolute top-1/4 left-1/4 w-72 h-72 bg-gray-700 rounded-full mix-blend-multiply filter blur-3xl opacity-20 pointer-events-none"></div>
-            <div ref={orb2Ref} className="absolute top-1/3 right-1/4 w-96 h-96 bg-gray-600 rounded-full mix-blend-multiply filter blur-3xl opacity-15 pointer-events-none"></div>
-            <div ref={orb3Ref} className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-gray-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 pointer-events-none"></div>
-        </>
-    );
-};
+const FloatingOrbs = () => (
+    <>
+        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-gray-700 rounded-full mix-blend-multiply filter blur-3xl opacity-20 pointer-events-none"></div>
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-gray-600 rounded-full mix-blend-multiply filter blur-3xl opacity-15 pointer-events-none"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-gray-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 pointer-events-none"></div>
+    </>
+);
 
 export default function Home() {
-    const heroRef = useRef(null);
-    const headingRef = useRef(null);
-    const subheadingRef = useRef(null);
-    const resumesSectionRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            const tl = gsap.timeline();
-
-            tl.fromTo(headingRef.current,
-                { y: 100, opacity: 0 },
-                { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
-            )
-                .fromTo(subheadingRef.current,
-                    { y: 50, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
-                    "-=0.5"
-                );
-
-            if (resumes.length > 0 && resumesSectionRef.current) {
-                const resumesSection = resumesSectionRef.current;
-                gsap.fromTo(resumesSection.children,
-                    { y: 80, opacity: 0 },
-                    {
-                        y: 0,
-                        opacity: 1,
-                        duration: 0.6,
-                        stagger: 0.1,
-                        ease: "power3.out",
-                        scrollTrigger: {
-                            trigger: resumesSection,
-                            start: "top 80%",
-                            toggleActions: "play none none reverse"
-                        }
-                    }
-                );
-            }
-        }, heroRef);
-
-        return () => ctx.revert();
-    }, [resumes.length]);
-
     return (
         <main className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 relative overflow-hidden">
             <FloatingOrbs />
 
-            <div className="relative">
+            <div className="relative z-10">
                 <Navbar />
 
-                <section ref={heroRef} className="relative">
+                <section className="relative">
                     <div className="container mx-auto px-6 py-16">
                         <div className="text-center mb-16">
-                            <h1 ref={headingRef} className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+                            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
                                 Track Your Applications &{" "}
                                 <span className="bg-gradient-to-r from-gray-300 to-gray-500 bg-clip-text text-transparent">
                                     Resume Ratings
                                 </span>
                             </h1>
-                            <p ref={subheadingRef} className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
                                 Review your submissions and get AI-powered feedback to land your dream job
                             </p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-                            <StatsCard number="2.5k+" label="Resumes Analyzed" delay={0.2} />
-                            <StatsCard number="89%" label="Success Rate" delay={0.4} />
-                            <StatsCard number="24/7" label="AI Support" delay={0.6} />
+                            <StatsCard number="2.5k+" label="Resumes Analyzed" />
+                            <StatsCard number="89%" label="Success Rate" />
+                            <StatsCard number="24/7" label="AI Support" />
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
@@ -220,7 +81,6 @@ export default function Home() {
                                 }
                                 title="Smart Analytics"
                                 description="Get detailed insights on your resume performance and application success rates"
-                                delay={0.2}
                             />
                             <FeatureCard
                                 icon={
@@ -230,7 +90,6 @@ export default function Home() {
                                 }
                                 title="AI-Powered Feedback"
                                 description="Receive intelligent suggestions to improve your resume and increase interview chances"
-                                delay={0.4}
                             />
                             <FeatureCard
                                 icon={
@@ -240,7 +99,6 @@ export default function Home() {
                                 }
                                 title="Application Tracking"
                                 description="Monitor all your job applications in one place with real-time status updates"
-                                delay={0.6}
                             />
                         </div>
 
@@ -252,7 +110,7 @@ export default function Home() {
                                         <span className="text-gray-300 text-sm font-medium">Trusted </span>
                                     </div>
                                 </div>
-                                <div ref={resumesSectionRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {resumes.map((resume) => (
                                         <ResumeCard key={resume.id} resume={resume} />
                                     ))}
@@ -277,7 +135,6 @@ export default function Home() {
                     </div>
                 </section>
             </div>
-            <Footer />
         </main>
     );
 }
