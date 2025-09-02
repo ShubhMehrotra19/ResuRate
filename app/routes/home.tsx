@@ -4,9 +4,11 @@ import {resumes} from "../../constants";
 import {ResumeCard} from "~/components/ResumeCard";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import * as React from "react";
 import Footer from "~/components/Footer";
+
+// Import ScrollTrigger correctly
+import ScrollTrigger from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
