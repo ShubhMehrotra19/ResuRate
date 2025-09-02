@@ -79,41 +79,74 @@ const Upload = () => {
     }
 
     return (
-        <main className="bg-[url('/images/bg-main.svg')] bg-cover">
+        <main className="bg-black min-h-screen w-full">
             <Navbar />
-
             <section className="main-section">
                 <div className="page-heading py-16">
-                    <h1>Smart feedback for your dream job</h1>
+                    <h1 className="text-2xl md:text-3xl font-extrabold text-gray-100 mb-2">
+                        Smart feedback for your dream job
+                    </h1>
                     {isProcessing ? (
                         <>
-                            <h2>{statusText}</h2>
-                            <img src="/images/resume-scan.gif" className="w-full" />
+                            <h2 className="text-lg font-semibold text-blue-300 mb-4">{statusText}</h2>
+                            <img src="/images/resume-scan.gif" className="w-full max-w-xs mx-auto rounded-xl shadow-lg" alt="Analyzing..." />
                         </>
                     ) : (
-                        <h2>Drop your resume for an ATS score and improvement tips</h2>
+                        <h2 className="text-lg text-gray-300 mb-2">
+                            Drop your resume for an <span className="text-blue-400 font-semibold">ATS</span> score and improvement tips
+                        </h2>
                     )}
                     {!isProcessing && (
-                        <form id="upload-form" onSubmit={handleSubmit} className="flex flex-col gap-4 mt-8">
+                        <form id="upload-form" onSubmit={handleSubmit} className="flex flex-col gap-4 mt-8 max-w-lg mx-auto bg-gray-900/70 border border-white/10 rounded-2xl shadow-2xl p-6">
                             <div className="form-div">
-                                <label htmlFor="company-name">Company Name <span className='text-lg font-semibold text-red-500/70'>*</span></label>
-                                <input required={true} type="text" name="company-name" placeholder="Company Name" id="company-name" />
+                                <label htmlFor="company-name" className="block font-bold text-sm text-gray-200 mb-2">
+                                    Company Name <span className='text-lg font-semibold text-red-500/70'>*</span>
+                                </label>
+                                <input
+                                    required={true}
+                                    type="text"
+                                    name="company-name"
+                                    placeholder="Company Name"
+                                    id="company-name"
+                                    className="w-full py-2 px-4 rounded-lg bg-black/60 border border-white/10 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+                                />
                             </div>
                             <div className="form-div">
-                                <label htmlFor="job-title">Job Title<span className='text-lg font-semibold text-red-500/70'>*</span></label>
-                                <input required={true} type="text" name="job-title" placeholder="Job Title" id="job-title" />
+                                <label htmlFor="job-title" className="block font-bold text-sm text-gray-200 mb-2">
+                                    Job Title <span className='text-lg font-semibold text-red-500/70'>*</span>
+                                </label>
+                                <input
+                                    required={true}
+                                    type="text"
+                                    name="job-title"
+                                    placeholder="Job Title"
+                                    id="job-title"
+                                    className="w-full py-2 px-4 rounded-lg bg-black/60 border border-white/10 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+                                />
                             </div>
                             <div className="form-div">
-                                <label htmlFor="job-description">Job Description<span className='text-lg font-semibold text-red-500/70'>*</span></label>
-                                <textarea required={true} rows={5} name="job-description" placeholder="Job Description" id="job-description" />
+                                <label htmlFor="job-description" className="block font-bold text-sm text-gray-200 mb-2">
+                                    Job Description <span className='text-lg font-semibold text-red-500/70'>*</span>
+                                </label>
+                                <textarea
+                                    required={true}
+                                    rows={5}
+                                    name="job-description"
+                                    placeholder="Job Description"
+                                    id="job-description"
+                                    className="w-full py-2 px-4 rounded-lg bg-black/60 border border-white/10 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all resize-none"
+                                />
                             </div>
-
                             <div className="form-div">
-                                <label htmlFor="uploader">Upload Resume</label>
+                                <label htmlFor="uploader" className="block font-bold text-sm text-gray-200 mb-2">
+                                    Upload Resume
+                                </label>
                                 <FileUploader onFileSelect={handleFileSelect} />
                             </div>
-
-                            <button className="primary-button" type="submit">
+                            <button
+                                className="primary-button w-full mt-3 py-3 text-lg rounded-xl font-bold bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 text-white shadow-lg transition-all duration-300 hover:from-blue-500 hover:via-blue-400 hover:to-blue-600 hover:scale-[1.01] active:scale-95"
+                                type="submit"
+                            >
                                 Analyze Resume
                             </button>
                         </form>
