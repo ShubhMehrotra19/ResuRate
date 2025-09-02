@@ -1,14 +1,10 @@
 import { Link } from "react-router";
 import { usePuterStore } from "~/lib/puter";
 import { useEffect, useState, useRef } from "react";
-import { gsap } from "gsap";
 
 export const Navbar = () => {
     const { auth } = usePuterStore();
     const [userName, setUserName] = useState<string>("");
-    const navRef = useRef(null);
-    const logoRef = useRef(null);
-    const buttonsRef = useRef(null);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -20,22 +16,6 @@ export const Navbar = () => {
             setUserName("");
         }
     }, [auth.isAuthenticated, auth.user]);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.fromTo(logoRef.current,
-                { x: -50, opacity: 0 },
-                { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
-            );
-
-            gsap.fromTo(buttonsRef.current,
-                { x: 50, opacity: 0 },
-                { x: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.2 }
-            );
-        }, navRef);
-
-        return () => ctx.revert();
-    }, []);
 
     // Handle outside click to close dropdown
     useEffect(() => {
@@ -72,14 +52,14 @@ export const Navbar = () => {
     };
 
     return (
-        <nav ref={navRef} className='z-[9998] relative flex items-center justify-between p-6 backdrop-blur-xl bg-white/5 border-b border-white/10'>
-            <Link to={"/"} className="hover:opacity-80 transition-opacity" ref={logoRef}>
+        <nav className='z-[9998] relative flex items-center justify-between p-6 backdrop-blur-xl bg-white/5 border-b border-white/10'>
+            <Link to={"/"} className="hover:opacity-80 transition-opacity">
                 <p className='text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent'>
                     ResuRate
                 </p>
             </Link>
 
-            <div ref={buttonsRef} className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
                 <Link
                     to={'/upload'}
                     className='group relative overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:bg-white/15 hover:border-white/30 hover:scale-105 hover:shadow-lg'

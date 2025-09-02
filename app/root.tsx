@@ -26,12 +26,6 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-    const { init, puterReady } = usePuterStore();
-
-    useEffect(() => {
-        init();
-    }, [init]);
-
     return (
         <html lang="en">
         <head>
@@ -42,18 +36,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </head>
         <body>
         <script src="https://js.puter.com/v2/"></script>
-        {/* Show loading screen while Puter is initializing */}
-        {!puterReady ? (
-            <div className="flex items-center justify-center min-h-screen bg-gray-50">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                    <p className="text-xl font-semibold text-gray-700">Initializing ResuRate...</p>
-                    <p className="text-gray-500 mt-2">Please wait while we set up your workspace</p>
-                </div>
-            </div>
-        ) : (
-            children
-        )}
+        {children}
         <ScrollRestoration />
         <Scripts />
         </body>
@@ -62,6 +45,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+    const { init, puterReady } = usePuterStore();
+
+    useEffect(() => {
+        init();
+    }, [init]);
+
+    // Show loading screen while Puter is initializing
+    if (!puterReady) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gray-50">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                    <p className="text-xl font-semibold text-gray-700">Initializing ResuRate...</p>
+                    <p className="text-gray-500 mt-2">Please wait while we set up your workspace</p>
+                </div>
+            </div>
+        );
+    }
+
     return <Outlet />;
 }
 
