@@ -176,7 +176,13 @@ export const usePuterStore = create<PuterStore>((set, get) => {
 
         try {
             await puter.auth.signIn();
-            await checkAuthStatus();
+            const authSuccess = await checkAuthStatus();
+
+            if (authSuccess && typeof window !== 'undefined') {
+                const urlParams = new URLSearchParams(window.location.search);
+                const next = urlParams.get('next');
+                window.location.href = next || '/';
+            }
         } catch (err) {
             const msg = err instanceof Error ? err.message : "Sign in failed";
             setError(msg);
@@ -206,6 +212,10 @@ export const usePuterStore = create<PuterStore>((set, get) => {
                 },
                 isLoading: false,
             });
+
+            if (typeof window !== 'undefined') {
+                window.location.href = '/auth';
+            }
         } catch (err) {
             const msg = err instanceof Error ? err.message : "Sign out failed";
             setError(msg);
@@ -321,7 +331,6 @@ export const usePuterStore = create<PuterStore>((set, get) => {
             setError("Puter.js not available");
             return;
         }
-        // return puter.ai.chat(prompt, imageURL, testMode, options);
         return puter.ai.chat(prompt, imageURL, testMode, options) as Promise<
             AIResponse | undefined
         >;

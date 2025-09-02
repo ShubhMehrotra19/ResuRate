@@ -9,8 +9,8 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import {usePuterStore} from "~/lib/puter";
-import {useEffect} from "react";
+import { usePuterStore } from "~/lib/puter";
+import { useEffect } from "react";
 
 export const links: Route.LinksFunction = () => [
     { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -26,10 +26,10 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-    const { init } = usePuterStore();
+    const { init, puterReady } = usePuterStore();
 
     useEffect(() => {
-        init()
+        init();
     }, [init]);
 
     return (
@@ -42,7 +42,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </head>
         <body>
         <script src="https://js.puter.com/v2/"></script>
-        {children}
+        {/* Show loading screen while Puter is initializing */}
+        {!puterReady ? (
+            <div className="flex items-center justify-center min-h-screen bg-gray-50">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                    <p className="text-xl font-semibold text-gray-700">Initializing ResuRate...</p>
+                    <p className="text-gray-500 mt-2">Please wait while we set up your workspace</p>
+                </div>
+            </div>
+        ) : (
+            children
+        )}
         <ScrollRestoration />
         <Scripts />
         </body>
@@ -76,8 +87,8 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
             <p>{details}</p>
             {stack && (
                 <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
+                    <code>{stack}</code>
+                </pre>
             )}
         </main>
     );
